@@ -30,10 +30,18 @@ int main()
 
   for (int i = strlen(*bcd) - 1; i >= 0; i--)
   {
-    printf("%s ", bcd[i]);
+    if (bcd[i] != NULL)
+    {
+      printf("%s ", bcd[i]);
+    }
   }
 
   printf("\n");
+
+  free(binario);
+  free(octal);
+  free(hexa);
+  free(bcd);
 
   return 0;
 }
