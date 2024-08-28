@@ -1,21 +1,39 @@
+/**
+ * Calculadora de Conversão Didática
+ * Author: Sophia de Araújo Gallindo Pinto - 3° B
+ * Created on Aug, 27th 2024
+ *
+ * Questão 1 - 27/08/2024
+ * Questão 2 - 27/08/2024
+ * Questão 2 - 28/08/2024
+ *
+ * Version: 0.0
+ *
+ */
+
 #include "helpers.h"
 
-void converterRealFloat(double real);
-char *converterRealDouble(double real);
+enum bits
+{
+  flutuante = 24,
+  duplo = 53
+};
+
+void converterRealPF(double real, enum bits bitsFracao);
 
 int main()
 {
-  converterRealFloat(100.09375);
+  converterRealPF(100.09375, flutuante);
+  converterRealPF(100.09375, duplo);
   return 0;
 }
 
-void converterRealFloat(double real)
+void converterRealPF(double real, enum bits bitsFracao)
 {
   int parteInteira = (int)real;
   double parteFracionada = real - parteInteira;
-  int expoente = 8, fracao = 23;
   char binarioSinalExpoente[9];
-  char binarioFracionado[24];
+  char binarioFracionado[bitsFracao];
   char *binario = converterDecimalParaBinario(parteInteira);
 
   binarioSinalExpoente[0] = real > 0 ? '0' : '1';
@@ -38,7 +56,7 @@ void converterRealFloat(double real)
 
   // parte fracionada
   int contFracao = 0;
-  while (parteFracionada != 1 && contFracao < 23)
+  while (parteFracionada != 1 && contFracao < bitsFracao - 1)
   {
     parteFracionada = parteFracionada * 2;
 
@@ -54,12 +72,8 @@ void converterRealFloat(double real)
 
     contFracao++;
   }
-  binarioFracionado[23] = '\0';
+  binarioFracionado[bitsFracao - 1] = '\0';
 
   printf("%s.", binarioSinalExpoente);
   printf("%s\n", binarioFracionado);
-};
-
-char *converterRealDouble(double real) {
-
 };

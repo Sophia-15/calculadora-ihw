@@ -1,3 +1,16 @@
+/**
+ * Calculadora de Conversão Didática
+ * Author: Sophia de Araújo Gallindo Pinto - 3° B
+ * Created on Aug, 27th 2024
+ *
+ * Questão 1 - 27/08/2024
+ * Questão 2 - 27/08/2024
+ * Questão 2 - 28/08/2024
+ *
+ * Version: 0.0
+ *
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
