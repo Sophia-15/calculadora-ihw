@@ -15,6 +15,12 @@
 #include <stdlib.h>
 #include <string.h>
 
+enum bits
+{
+  flutuante = 24,
+  duplo = 53
+};
+
 char *reverterString(char *string)
 {
   char *stringReversa = (char *)malloc((strlen(string) + 1) * sizeof(char));
@@ -154,3 +160,57 @@ char **converterDecimalParaBCD(int decimal)
 
   return bcdConvertido;
 }
+
+char *converterRealPF(double real, enum bits bitsFracao)
+{
+  int parteInteira = (int)real;
+  double parteFracionada = real - parteInteira;
+  char binarioSinalExpoente[10];
+  char binarioFracionado[bitsFracao];
+  char *binario = converterDecimalParaBinario(parteInteira);
+  char *numCompleto = (char *)malloc(sizeof(char) * bitsFracao + 10);
+
+  binarioSinalExpoente[0] = real > 0 ? '0' : '1';
+
+  // parte inteira
+  int contExpoente = 0;
+  for (int i = 1; i < 9; i++)
+  {
+    if (i <= (8 - (strlen(binario))))
+    {
+      binarioSinalExpoente[i] = '0';
+    }
+    else
+    {
+      binarioSinalExpoente[i] = binario[contExpoente];
+      contExpoente++;
+    }
+  }
+  binarioSinalExpoente[8] = '.';
+  binarioSinalExpoente[9] = '\0';
+
+  // parte fracionada
+  int contFracao = 0;
+  while (parteFracionada != 1 && contFracao < bitsFracao - 1)
+  {
+    parteFracionada = parteFracionada * 2;
+
+    if (parteFracionada >= 1)
+    {
+      binarioFracionado[contFracao] = '1';
+      parteFracionada = parteFracionada - 1;
+    }
+    else
+    {
+      binarioFracionado[contFracao] = '0';
+    }
+
+    contFracao++;
+  }
+  binarioFracionado[bitsFracao - 1] = '\0';
+
+  strcpy(numCompleto, binarioSinalExpoente);
+  strcat(numCompleto, binarioFracionado);
+
+  return numCompleto;
+};
