@@ -5,7 +5,7 @@
  *
  * Questão 1 - 27/08/2024
  * Questão 2 - 27/08/2024
- * Questão 2 - 28/08/2024
+ * Questão 3 - 28/08/2024
  *
  * Version: 0.0
  *
@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 enum bits
 {
@@ -23,6 +24,8 @@ enum bits
 
 char *reverterString(char *string)
 {
+  printf("Revertendo a string...\n");
+  sleep(1);
   char *stringReversa = (char *)malloc((strlen(string) + 1) * sizeof(char));
 
   for (int i = strlen(string) - 1; i >= 0; i--)
@@ -35,11 +38,17 @@ char *reverterString(char *string)
 
 char coverterHexaEquivalente(int num)
 {
-  return 'A' + (num - 10);
+  printf("Convertendo valor decimal >= 10 para hexadecimal...\n");
+  sleep(1);
+  char hexa = 'A' + (num - 10);
+
+  return hexa;
 }
 
 char *inverterCaracteres(char *binario)
 {
+  printf("Invertendo bits do binário (complemento de 1)...\n");
+  sleep(1);
   char *binarioInvertido = (char *)malloc((strlen(binario) + 1) * sizeof(char));
   int umCont = 0;
 
@@ -64,6 +73,8 @@ char *inverterCaracteres(char *binario)
 
 char *converterDecimalParaBinario(int decimal)
 {
+  printf("Convertendo decimal %d para binário...\n", decimal);
+  sleep(1);
   int resto;
   int quociente = decimal;
   char binarioContrario[100] = "", *binario, strResto[100];
@@ -84,6 +95,8 @@ char *converterDecimalParaBinario(int decimal)
 
 char *converterDecimalParaOctal(int decimal)
 {
+  printf("Convertendo decimal %d para octal...\n", decimal);
+  sleep(1);
   int resto;
   int quociente = decimal;
   char octalContrario[100] = "", *octal, strResto[100];
@@ -104,6 +117,8 @@ char *converterDecimalParaOctal(int decimal)
 
 char *converterDecimalParaHexa(int decimal)
 {
+  printf("Convertendo decimal %d para hexadecimal...\n", decimal);
+  sleep(1);
   int resto;
   int quociente = decimal;
   char hexaContrario[100] = "", *hexa, strResto[100];
@@ -133,6 +148,8 @@ char *converterDecimalParaHexa(int decimal)
 
 char **converterDecimalParaBCD(int decimal)
 {
+  printf("Convertendo decimal %d para BCD...\n", decimal);
+  sleep(1);
   char **bcdConvertido = (char **)malloc(60 * sizeof(char *));
   int resto;
   int cont = 0;
@@ -147,7 +164,7 @@ char **converterDecimalParaBCD(int decimal)
       "0110",
       "0111",
       "1000",
-      "1001"};
+      "1009"};
 
   while (decimal > 0)
   {
@@ -155,25 +172,37 @@ char **converterDecimalParaBCD(int decimal)
     decimal = decimal / 10;
 
     bcdConvertido[cont] = bcd[resto];
+    printf("Dígito %d convertido para BCD: %s\n", resto, bcdConvertido[cont]);
+    sleep(1);
     cont++;
   }
 
   return bcdConvertido;
 }
 
+// corrigir
 char *converterRealPF(double real, enum bits bitsFracao)
 {
+  printf("Iniciando conversão de número real (%f) para ponto flutuante...\n", real);
+  sleep(1);
+
   int parteInteira = (int)real;
   double parteFracionada = real - parteInteira;
-  char binarioSinalExpoente[10];
-  char binarioFracionado[bitsFracao];
+
+  char binarioSinalExpoente[9];
+  char binarioFracionado[bitsFracao + 1];
   char *binario = converterDecimalParaBinario(parteInteira);
-  char *numCompleto = (char *)malloc(sizeof(char) * bitsFracao + 10);
+  printf("Converterndo parte inteira em binário...\n");
+  sleep(1);
+
+  char *numCompletoNaoFormatado = (char *)malloc(sizeof(char) * bitsFracao + 10);
 
   binarioSinalExpoente[0] = real > 0 ? '0' : '1';
+  printf("Adicionando bit de sinal...\n");
+  sleep(1);
 
-  // parte inteira
   int contExpoente = 0;
+  int contUm = 0;
   for (int i = 1; i < 9; i++)
   {
     if (i <= (8 - (strlen(binario))))
@@ -182,14 +211,23 @@ char *converterRealPF(double real, enum bits bitsFracao)
     }
     else
     {
-      binarioSinalExpoente[i] = binario[contExpoente];
+
+      if (binarioSinalExpoente[i] == '.')
+      {
+        binarioSinalExpoente[i + 1] = binario[contExpoente];
+      }
+      else
+      {
+        binarioSinalExpoente[i] = binario[contExpoente];
+      }
+
       contExpoente++;
     }
   }
-  binarioSinalExpoente[8] = '.';
-  binarioSinalExpoente[9] = '\0';
+  binarioSinalExpoente[8] = '\0';
+  printf("Expoente em binário...\n");
+  sleep(1);
 
-  // parte fracionada
   int contFracao = 0;
   while (parteFracionada != 1 && contFracao < bitsFracao - 1)
   {
@@ -208,9 +246,27 @@ char *converterRealPF(double real, enum bits bitsFracao)
     contFracao++;
   }
   binarioFracionado[bitsFracao - 1] = '\0';
+  printf("Parte fracionada em binário...\n");
+  sleep(1);
 
-  strcpy(numCompleto, binarioSinalExpoente);
-  strcat(numCompleto, binarioFracionado);
+  strcpy(numCompletoNaoFormatado, binarioSinalExpoente);
+  strcat(numCompletoNaoFormatado, binarioFracionado);
 
-  return numCompleto;
-};
+  char *numCompletoFormatado = (char *)malloc(strlen(numCompletoNaoFormatado) + 2);
+
+  int pontoInserido = 0;
+
+  printf("Transformando em notação científica...\n");
+  for (int i = 0; i < strlen(numCompletoNaoFormatado); i++)
+  {
+    numCompletoFormatado[i + pontoInserido] = numCompletoNaoFormatado[i];
+    if (numCompletoNaoFormatado[i] == '1' && !pontoInserido)
+    {
+      numCompletoFormatado[i + 1] = '.';
+      pontoInserido = 1;
+    }
+  }
+  numCompletoFormatado[strlen(numCompletoNaoFormatado) + pontoInserido] = '\0';
+
+  return numCompletoFormatado;
+}

@@ -5,7 +5,7 @@
  *
  * Questão 1 - 27/08/2024
  * Questão 2 - 27/08/2024
- * Questão 2 - 28/08/2024
+ * Questão 3 - 28/08/2024
  *
  * Version: 0.0
  *
@@ -24,7 +24,7 @@ int main()
   hexa = converterDecimalParaHexa(300);
   bcd = converterDecimalParaBCD(300);
 
-  printf("Binário: %s\n", binario);
+  printf("\nBinário: %s\n", binario);
   printf("Octal: %s\n", octal);
   printf("Hexadecimal: %s\n", hexa);
   printf("BCD: ");

@@ -5,7 +5,7 @@
  *
  * Questão 1 - 27/08/2024
  * Questão 2 - 27/08/2024
- * Questão 2 - 28/08/2024
+ * Questão 3 - 28/08/2024
  *
  * Version: 0.0
  *
@@ -15,8 +15,8 @@
 
 int main()
 {
-  char *fl = converterRealPF(100.09375, flutuante);
-  char *db = converterRealPF(100.09375, duplo);
+  char *fl = converterRealPF(63.09375, flutuante);
+  char *db = converterRealPF(63.09375, duplo);
 
   printf("%s\n", fl);
   printf("%s\n", db);
